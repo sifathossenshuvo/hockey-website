@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hockey</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.11.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- manrop font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500&display=swap" rel="stylesheet">
+  <!-- tailwind costom colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'gradient-start': '#FF8938',
+            'gradient-end': '#F00',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .font-manrope {
+      font-family: 'Manrope', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      cursor: none;
+      /* Hide the default cursor */
+
+
+    }
+
+    .fire-cursor {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+
+      position: fixed;
+      box-shadow: 0 0 10px 5px rgb(240, 21, 36);
+      /* Adjust the color and size of the shadow as needed */
+      pointer-events: none;
+      /* Ignore the cursor when interacting with other elements */
+
+      z-index: 10000;
+    }
+  </style>
+</head>
+
+<body class="font-manrope">
+  <div class=" fire-cursor bg-gradient-to-r from-gradient-start to-gradient-end" id="fireCursor"></div>
+
+  <script>
+    const cursor = document.getElementById('fireCursor');
+
+    window.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      cursor.style.top = `${mouseY - cursor.offsetHeight / 2}px`;
+      cursor.style.left = `${mouseX - cursor.offsetWidth / 2}px`;
+    });
+    // The number of circles to form the trail
+    const trailLength = 20;
+    const trailElements = [];
+
+    // Create trail elements
+    for (let i = 0; i < trailLength; i++) {
+      let el = document.createElement('div');
+      el.className = 'blue';
+      document.body.appendChild(el);
+      trailElements.push(el);
+    }
+
+    let lastX = -100;
+    let lastY = -100;
+
+    // Update the position of each trail element
+    document.addEventListener('mousemove', (event) => {
+      lastX = event.pageX;
+      lastY = event.pageY;
+      for (let i = 0; i < trailElements.length; i++) {
+        setTimeout(() => {
+          if (trailElements[i]) {
+            trailElements[i].style.left = lastX + 'px';
+            trailElements[i].style.top = lastY + 'px';
+          }
+        }, i * 20); // Delay each dot to create the trail effect
+      }
+    });
+  </script>
+  <header>
+    <nav class="">
+      <div class="navbar bg-base-100 py-16 lg:px-40">
+        <div class="navbar-start">
+          <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+              </svg>
+            </div>
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+              <ul class="menu bg-base-200 rounded-box">
+                <li>
+                  <a class="tooltip tooltip-right" data-tip="Home">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="tooltip tooltip-right" data-tip="Details">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="tooltip tooltip-right" data-tip="Stats">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            </ul>
+          </div>
+          <a class="btn btn-ghost text-4xl font-extrabold">Hockey’s</a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+          <ul class="menu menu-horizontal px-1 font-bold">
+            <li><a><span class="text-[#FF4240]">Home</span></a></li>
+            <li><a>About</a></li>
+            <li><a>Pages</a></li>
+            <li><a>Blog</a></li>
+            <li><a>Contact</a></li>
+          </ul>
+        </div>
+        <div class="navbar-end gap-4">
+          <button class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+          <a class="btn btn-primary bg-[#FF4240] border-none">Get Ticket</a>
+        </div>
+      </div>
+    </nav>
+    <!-- hero section -->
+    <div class="container mx-auto ">
+      <div class="carousel w-full">
+        <div id="slide1" class="carousel-item relative w-full">
+          <img src="./Images/1.png" class=" lg:w-full" />
+          <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a href="#slide3" class="btn btn-circle">❮</a>
+            <a href="#slide2" class="btn btn-circle">❯</a>
+          </div>
+        </div>
+        <div id="slide2" class="carousel-item  relative w-full">
+          <img src="./Images/3.png" class="w-full lg:h-[720px] " />
+          <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a href="#slide1" class="btn btn-circle">❮</a>
+            <a href="#slide3" class="btn btn-circle">❯</a>
+          </div>
+        </div>
+        <div id="slide3" class="carousel-item relative w-full">
+          <img src="./Images/4.png" class="w-full lg:h-[720px]" />
+          <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a href="#slide2" class="btn btn-circle">❮</a>
+            <a href="#slide1" class="btn btn-circle">❯</a>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-black mt-3 rounded-xl lg:w-1/3 lg:translate-x-[450px] mx-auto  px-4 py-6 lg:-translate-y-64 h-auto flex   ">
+        <div class=" space-y-4">
+          <h3 class="text-[24px] font-semibold text-white">mathe designed with two main goals </h3>
+          <p class="text-zinc-300">TeX was designed with two main goals in mind: to allow anybody to produce
+            high-quality books with minimal effort, and to </p>
+        </div>
+      </div>
+
+    </div>
+  </header>
+  <main class="mx-auto">
+
+    <section class="container mx-auto">
+      <hr class="border-dashed border-spacing-9 mb-10 mx-auto">
+      <div class="text-center">
+        <h1 class="text-4xl font-extrabold text-[#131318] mb-5">Professional Hockeys Club</h1>
+        <p>Dit amet consectetur. Condimentum dignissim adipiscing aliquam turpis placerat <br> dolor. Purus urna
+          in sit
+          nullam proin. </p>
+      </div>
+    </section>
+    <section class="container mx-auto">
+      <hr class="border-dashed border-spacing-4 mb-12 mx-auto">
+      <!-- card -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 text-center gap-7">
+        <!-- card 1 -->
+        <div class="">
+          <div class="size-44 radial-progress text-[#FF4240]" style="--value:87;" role="progressbar">87%</div>
+          <h1 class="py-5 font-bold">Prayer Facility</h1>
+          <p class="">Amet consectetur. Condimentum dignissim adipiscing .</p>
+        </div>
+        <!-- card 2 -->
+        <div class="">
+          <div class="size-44 radial-progress text-[#49D293]" style="--value:95;" role="progressbar">95%</div>
+          <h1 class="p-5 font-bold">Experienced Coach</h1>
+          <p class="">Amet consectetur. Condimentum dignissim adipiscing .</p>
+        </div>
+        <!-- card 3-->
+        <div class="">
+          <div class="size-44 radial-progress text-[#FFB546]" style="--value:90;" role="progressbar">90%</div>
+          <h1 class="py-5 font-bold">Senior Player</h1>
+          <p class="">Amet consectetur. Condimentum dignissim adipiscing .</p>
+        </div>
+        <!-- card4 -->
+        <div class="">
+          <div class="size-44 radial-progress text-[#4C8DF1]" style="--value:80;" role="progressbar">80%</div>
+          <h1 class="py-5 font-bold">Training Ground</h1>
+          <p class="">Amet consectetur. Condimentum dignissim adipiscing .</p>
+        </div>
+      </div>
+    </section>
+    <!-- program section -->
+
+    <section class="container mt-24 mx-auto">
+      <hr class="mx-48 border-dashed border-spacing-10  mb-6">
+      <div class="text-center">
+        <h1 class="font-bold text-4xl mb-6">Program Sections</h1>
+        <p>Dit amet consectetur. Condimentum dignissim adipiscing aliquam turpis placerat <br> dolor. Purus urna in sit
+          nullam proin. </p>
+      </div>
+
+    </section>
+    <!-- our program -->
+    <hr class="border-dashed border-spacing-10 lg:mx-auto my-6">
+    <section class="container mx-auto">
+      <div class="grid lg:grid-cols-2 grid-cols-1 gap-5">
+        <div
+          class="flex-1  h-72  bg-cover lg:h-[338px] flex items-center rounded-3xl relative bg-no-repeat bg-[linear-gradient(45deg,rgba(0,0,0,0.4),rgba(0,0,0,0.2)),url('./Images/2.png')] lg:w-full">
+          <div class="pl-7 pr-5 lg:w-3/4 space-y-2  lg:space-y-4">
+            <h2 class="text-2xl text-white font-bold">Senior Program</h2>
+            <p class="space-y-4 text-white">Dolor sit amet consectetur. Ut urna diam quis sagittis. Elit elit
+              enim sagittis turpis in magna. Id et sed euismod natoque amet nunc morbi nulla. Tortor congue sed et in.
+            </p>
+            <button
+              class="btn btn-primary border-none bg-[#FF4240] rounded-xl font-semibold text-[15px] lg:text-[20px] text-white py-2 lg:py-3 px-4 lg:px-7">Apply
+              Now!</button>
+          </div>
+        </div>
+        <div
+          class="flex-1 bg-cover h-72  lg:h-[338px] flex items-center :justify-center rounded-3xl relative bg-no-repeat bg-[linear-gradient(45deg,rgba(0,0,0,0.4),rgba(0,0,0,0.2)),url('./Images/3.png')] lg:w-full">
+          <div class="pl-7 pr-5 lg:w-3/4 space-y-2  lg:space-y-4">
+            <h2 class="text-2xl text-white font-bold">Teenager consual program</h2>
+            <p class=" lg:space-y-4 text-white">street sign, an arrangement of buildings on a city block, or styles of
+              clothing. It is a coherent set of signs that or styles of clothing. It is a coherent transmits some</p>
+            <button
+              class="btn btn-primary border-none bg-[#FF4240] rounded-xl font-semibold text-[15px] lg:text-[20px] text-white py-2 lg:py-3 px-4 lg:px-7">Apply
+              Now!</button>
+          </div>
+        </div>
+
+      </div>
+      </div>
+
+      <div class="container mx-auto mt-5">
+        <div
+          class="flex-1  h-72  bg-cover lg:h-[500px] flex items-end  rounded-[35px] relative bg-no-repeat bg-[linear-gradient(45deg,rgba(0,0,0,0.4),rgba(0,0,0,0.2)),url('./Images/4.png')] lg:w-full">
+          <div class="pl-7 pr-5 lg:w-[40%] space-y-2 -translate-y-12  lg:space-y-4">
+            <h2 class="text-2xl text-white font-bold">Professional Program</h2>
+            <p class="space-y-4 text-white">street sign, an arrangement of buildings on a city block, or styles of
+              clothing. It is a coherent set of signs that or styles of clothing. It is a coherent transmits some</p>
+            <button
+              class="btn btn-primary border-none bg-[#FF4240] rounded-xl font-semibold text-[15px] lg:text-[20px] text-white py-2 lg:py-3 px-4 lg:px-7">Apply
+              Now!</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- our prodect section    -->
+    <section class="px-5 lg:px-0 container mx-auto my-24">
+      <hr class="border-dashed border-spacing-11 mb-6">
+      <div class=" lg:w-2/4 mx-auto text-center space-y-4 lg:space-y-9">
+        <h1 class="text-3xl font-extrabold font-manrope">Our New Products</h1>
+        <p class="space-y-3 text-gray-600">adipiscing aliquam turpis Dit amet consectetur. Condimentum dignissim
+          placerat dolor. Purus urna in sit nullam proin Dit amet consectetur. </p>
+      </div>
+      <hr class="border-dashed border-spacing-11 mt-6">
+      <div class="grid grid-cols-1 gap-5 mt-20 lg:grid-cols-2 ">
+
+
+        <div class="hero mb-5 border-2 border-
+        [1px solid rgba 19, 19, 24, 0.10] rounded-xl  w-full">
+          <div class="hero-content flex-col lg:flex-row  ">
+            <img src="./Images/5.png" class="  w-full object-cover lg:w-auto " />
+            <div class="space-y-3">
+              <div class="flex items-center space-x-3 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                </svg>
+                <p>
+                  <span>5.0</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+
+                <p>
+                  <span>20</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+
+                <p>
+                  <span>200</span>
+                </p>
+              </div>
+              <h1 class="text-2xl font-bold">World Cup Flags Cricket</h1>
+              <p class="w-3/4"> sit amet Purus urna in sit nullam proin Dit amet consectetur </p>
+              <div class="lg:flex">
+                <h3 class="text-[#FF4240] font-semibold mb-3 pr-3">Price - $22.00</h3>
+                <span><i class="fa-solid fa-truck "></i> Delivery Fee : Free</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero mb-5 border-2 border-
+        [1px solid rgba 19, 19, 24, 0.10] rounded-xl  w-full">
+          <div class="hero-content flex-col lg:flex-row  ">
+            <img src="./Images/6.png" class="  w-full object-cover lg:w-auto " />
+            <div class="space-y-3">
+              <div class="flex items-center space-x-3 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                </svg>
+                <p>
+                  <span>5.0</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+
+                <p>
+                  <span>20</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+
+                <p>
+                  <span>200</span>
+                </p>
+              </div>
+              <h1 class="text-2xl font-bold">World Cup Flags Cricket</h1>
+              <p class="w-3/4"> sit amet Purus urna in sit nullam proin Dit amet consectetur </p>
+              <div class="lg:flex">
+                <h3 class="text-[#FF4240] font-semibold mb-3 pr-3">Price - $22.00</h3>
+                <span><i class="fa-solid fa-truck "></i> Delivery Fee : Free</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero mb-5 border-2 border-
+        [1px solid rgba 19, 19, 24, 0.10] rounded-xl  w-full">
+          <div class="hero-content flex-col lg:flex-row  ">
+            <img src="./Images/7.png" class="  w-full object-cover lg:w-auto " />
+            <div class="space-y-3">
+              <div class="flex items-center space-x-3 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                </svg>
+                <p>
+                  <span>5.0</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+
+                <p>
+                  <span>20</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+
+                <p>
+                  <span>200</span>
+                </p>
+              </div>
+              <h1 class="text-2xl font-bold">World Cup Flags Cricket</h1>
+              <p class="w-3/4"> sit amet Purus urna in sit nullam proin Dit amet consectetur </p>
+              <div class="lg:flex">
+                <h3 class="text-[#FF4240] font-semibold mb-3 pr-3">Price - $22.00</h3>
+                <span><i class="fa-solid fa-truck "></i> Delivery Fee : Free</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero mb-5 border-2 border-
+        [1px solid rgba 19, 19, 24, 0.10] rounded-xl  w-full">
+          <div class="hero-content flex-col lg:flex-row  ">
+            <img src="./Images/8.png" class="  w-full object-cover lg:w-auto " />
+            <div class="space-y-3">
+              <div class="flex items-center space-x-3 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                </svg>
+                <p>
+                  <span>5.0</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+
+                <p>
+                  <span>20</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+
+                <p>
+                  <span>200</span>
+                </p>
+              </div>
+              <h1 class="text-2xl font-bold">World Cup Flags Cricket</h1>
+              <p class="w-3/4"> sit amet Purus urna in sit nullam proin Dit amet consectetur </p>
+              <div class="lg:flex">
+                <h3 class="text-[#FF4240] font-semibold mb-3 pr-3">Price - $22.00</h3>
+                <span><i class="fa-solid fa-truck "></i> Delivery Fee : Free</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero mb-5 border-2 border-
+        [1px solid rgba 19, 19, 24, 0.10] rounded-xl  w-full">
+          <div class="hero-content flex-col lg:flex-row  ">
+            <img src="./Images/9.png" class="  w-full object-cover lg:w-auto " />
+            <div class="space-y-3">
+              <div class="flex items-center space-x-3 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                </svg>
+                <p>
+                  <span>5.0</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+
+                <p>
+                  <span>20</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+
+                <p>
+                  <span>200</span>
+                </p>
+              </div>
+              <h1 class="text-2xl font-bold">World Cup Flags Cricket</h1>
+              <p class="w-3/4"> sit amet Purus urna in sit nullam proin Dit amet consectetur </p>
+              <div class="lg:flex">
+                <h3 class="text-[#FF4240] font-semibold mb-3 pr-3">Price - $22.00</h3>
+                <span><i class="fa-solid fa-truck "></i> Delivery Fee : Free</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero mb-5 border-2 border-
+        [1px solid rgba 19, 19, 24, 0.10] rounded-xl  w-full">
+          <div class="hero-content flex-col lg:flex-row  ">
+            <img src="./Images/10.png" class="  w-full object-cover lg:w-auto " />
+            <div class="space-y-3">
+              <div class="flex items-center space-x-3 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                </svg>
+                <p>
+                  <span>5.0</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+
+                <p>
+                  <span>20</span>
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+
+                <p>
+                  <span>200</span>
+                </p>
+              </div>
+              <h1 class="text-2xl font-bold">World Cup Flags Cricket</h1>
+              <p class="w-3/4"> sit amet Purus urna in sit nullam proin Dit amet consectetur </p>
+              <div class="lg:flex">
+                <h3 class="text-[#FF4240] font-semibold mb-3 pr-3">Price - $22.00</h3>
+                <span><i class="fa-solid fa-truck "></i> Delivery Fee : Free</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="container mx-auto">
+      <hr class="border-dashed">
+      <div class="text-center mt-5 mb-6">
+        <h1 class="text-4xl font-extrabold">Clients Question</h1>
+        <p>Dit amet consectetur. Condimentum dignissim adipiscing aliquam turpis placerat <br> dolor. Purus urna in sit
+          nullam proin. </p>
+      </div>
+      <hr class="border-dashed border-spacing-10">
+    </section>
+  </main>
+  <footer>
+
+  </footer>
+</body>
+
+</html>
